@@ -1,5 +1,5 @@
 import { HealthDaoInterface } from "../interfaces/health-dao.interface";
-import { Health } from "../../domain/health";
+import { Health } from "../../core/domain/health";
 import { DaoFactoryInterface } from "../interfaces/dao-factory.interface";
 
 export class HealthDao implements HealthDaoInterface, DaoFactoryInterface<HealthDao> {

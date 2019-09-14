@@ -1,5 +1,5 @@
 import chai from 'chai';
-import { HealthService } from "../../app/services/services.impl/health-service";
+import { HealthService } from "../../app/core/services/services.impl/health-service";
 import { HealthDao } from "../../app/dao/dao.memory/health-dao";
 
 const expect = chai.expect;

@@ -22,16 +22,19 @@
     "mongodb": "^3.3.0-beta2",
     "ts-node-dev": "^1.0.0-pre.40",
     "typescript": "^3.5.3",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "winston": "^3.2.1",
+    "winston-daily-rotate-file": "^3.10.0"
   },
   "devDependencies": {
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.7",
+    "@types/mongodb": "^3.1.32",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
-    "dotenv": "^8.0.0",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
+    "dotenv": "^8.0.0",
     "eslint": "^6.1.0",
     "mocha": "^6.2.0"
   }
