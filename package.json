@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha -r ts-node/register src/*.tests/**/*.spec.ts --exit",
-    "tsc": "tsc",
+    "build": "tsc",
+    "start": "tsc && node ./build/app.js",
     "dev": "ts-node-dev --respawn --transpileOnly ./src/app/app.ts",
     "lint": "eslint 'src/**/*.ts'"
   },
