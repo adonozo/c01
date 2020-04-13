@@ -25,8 +25,15 @@ export class IngredientsService extends AbstractService implements IngredientsSe
         return this.logger;
     }
 
-    public getAllIngredients(): Promise<Ingredient[]> {
-        return this.handle(() => this.ingredientsDao.getAllIngredients());
+    public getIngredients(): Promise<Ingredient[]>
+    public getIngredients(queryParams: QueryParams): Promise<Ingredient[]>
+
+    public getIngredients(queryParams?: QueryParams): Promise<Ingredient[]> {
+        if (!queryParams) {
+            return this.handle(() => this.ingredientsDao.getIngredients());
+        }
+
+        return this.handle(() => this.ingredientsDao.getIngredients(queryParams));
     }
 
     public createIngredient(ingredient: Ingredient): Promise<Ingredient> {
@@ -45,10 +52,6 @@ export class IngredientsService extends AbstractService implements IngredientsSe
             await this.ingredientExists(id);
             return this.ingredientsDao.getIngredient(id);
         });
-    }
-
-    public getIngredients(queryParams: QueryParams): Promise<Ingredient[]> {
-        return this.handle(() => this.ingredientsDao.getIngredients(queryParams));
     }
 
     public updateIngredient(id: string, actualIngredient: Ingredient): Promise<void> {

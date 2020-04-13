@@ -3,6 +3,7 @@ import { Logger } from "../utils/logger";
 import { Ingredient } from "../core/domain/ingredient";
 import { Request, Response } from "express";
 import * as winston from "winston";
+import { StatusCodes } from "./enums/status-codes.enum";
 
 export class IngredientsController extends AbstractController {
     private logger = Logger.getLogger('IngredientsController');
@@ -14,41 +15,41 @@ export class IngredientsController extends AbstractController {
     public allIngredients(request: Request, response: Response): void {
         this.executePromise(request, response, async () => {
             const result = await this.getIngredients();
-            response.status(200).send(result);
+            response.status(StatusCodes.OK).send(result);
         })
     }
 
     public singleIngredient(request: Request, response: Response): void {
         this.executePromise(request, response, async () => {
             const result = await this.getIngredient(request.params.id);
-            response.status(200).send(result);
+            response.status(StatusCodes.OK).send(result);
         })
     }
 
     public updateSingleIngredient(request: Request, response: Response): void {
         this.executePromise(request, response, async () => {
             await this.updateIngredient(request.params.id, request.body);
-            response.status(204).send();
+            response.status(StatusCodes.NO_CONTENT).send();
         });
     }
 
     public newIngredient(request: Request, response: Response): void {
         this.executePromise(request, response, async () => {
             const result = await this.postIngredient(request.body);
-            response.status(201).send(result);
+            response.status(StatusCodes.CREATED).send(result);
         });
     }
 
     public deleteSingleIngredient(request: Request, response: Response): void {
         this.executePromise(request, response, async() => {
             await this.deleteIngredient(request.params.id);
-            response.status(204).send();
+            response.status(StatusCodes.NO_CONTENT).send();
         });
     }
 
     private async getIngredients(): Promise<Ingredient[]> {
         const ingredientsService = this.service.IngredientsService;
-        const ingredients = await ingredientsService.getAllIngredients();
+        const ingredients = await ingredientsService.getIngredients();
         this.logger.info(`Found ${ingredients.length} ingredients`);
         return ingredients;
     }

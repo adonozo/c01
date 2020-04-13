@@ -18,10 +18,24 @@ export class IngredientsDao extends AbstractMongo
         return new IngredientsDao();
     }
 
-    public getAllIngredients(): Promise<Ingredient[]> {
-        this.ingredientsLogger.info(`Getting ingredients from: ${this.collectionName}`);
-        return this.executeQuery<Ingredient[]>(collection => {
-            return collection.find<Ingredient>({}).toArray();
+    public getIngredients(): Promise<Ingredient[]>;
+    public getIngredients(queryParams?: QueryParams): Promise<Ingredient[]>;
+
+    public getIngredients(queryParams?: QueryParams): Promise<Ingredient[]> {
+        if (!queryParams) {
+            this.ingredientsLogger.info(`Getting ingredients from: ${this.collectionName}`);
+            return this.executeQuery<Ingredient[]>(collection => {
+                return collection.find<Ingredient>({}).toArray();
+            }, this.collectionName);
+        }
+
+        this.ingredientsLogger.info(`Searching ingredients for supplied params`);
+        return this.executeQuery<Ingredient[]>(async collection => {
+            const regexExpression = new RegExp(escape(queryParams.filter));
+            const ingredients = await collection.find({ name: regexExpression })
+                .skip(queryParams.pageSize * queryParams.page)
+                .limit(queryParams.pageSize);
+            return ingredients === null ? ingredients : Promise.resolve([]);
         }, this.collectionName);
     }
 
@@ -47,17 +61,6 @@ export class IngredientsDao extends AbstractMongo
                 return ingredient;
             }
             throw new NotFoundException(`Ingredient ${id} not found`);
-        }, this.collectionName);
-    }
-
-    public getIngredients(queryParams: QueryParams): Promise<Ingredient[]> {
-        this.ingredientsLogger.info(`Searching ingredients for supplied params`);
-        return this.executeQuery<Ingredient[]>(async collection => {
-            const regexExpression = new RegExp(escape(queryParams.filter));
-            const ingredients = await collection.find({ name: regexExpression })
-                .skip(queryParams.pageSize * queryParams.page)
-                .limit(queryParams.pageSize);
-            return ingredients === null ? ingredients : Promise.resolve([]);
         }, this.collectionName);
     }
 

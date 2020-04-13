@@ -2,7 +2,7 @@ import { Ingredient } from "../../core/domain/ingredient";
 import { QueryParams } from "../../core/domain/api-rest/query-params";
 
 export interface IngredientsDaoInterface {
-    getAllIngredients(): Promise<Ingredient[]>;
+    getIngredients(): Promise<Ingredient[]>;
 
     getIngredients(queryParams: QueryParams): Promise<Ingredient[]>;
 

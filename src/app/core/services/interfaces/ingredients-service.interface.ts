@@ -2,7 +2,7 @@ import { Ingredient } from "../../domain/ingredient";
 import { QueryParams } from "../../domain/api-rest/query-params";
 
 export interface IngredientsServiceInterface {
-    getAllIngredients(): Promise<Ingredient[]>;
+    getIngredients(): Promise<Ingredient[]>;
 
     getIngredients(queryParams: QueryParams): Promise<Ingredient[]>;
 

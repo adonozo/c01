@@ -22,8 +22,17 @@ export class IngredientsDao implements IngredientsDaoInterface, DaoFactoryInterf
         return Promise.resolve(ingredientIndex >= 0);
     }
 
-    public getAllIngredients(): Promise<Ingredient[]> {
-        return Promise.resolve(this.ingredients);
+    public getIngredients(): Promise<Ingredient[]>;
+    public getIngredients(queryParams: QueryParams): Promise<Ingredient[]>;
+
+    public getIngredients(queryParams?: QueryParams): Promise<Ingredient[]> {
+        if (!queryParams){
+            return Promise.resolve(this.ingredients);
+        }
+
+        const filter = queryParams.filter;
+        const result = this.ingredients.filter(ingredient => ingredient.name.toLowerCase().match(filter));
+        return Promise.resolve(result);
     }
 
     private static setDummyIngredients(): Ingredient[] {
@@ -49,7 +58,7 @@ export class IngredientsDao implements IngredientsDaoInterface, DaoFactoryInterf
             this.ingredients = this.ingredients.slice(index, 1);
             return Promise.resolve();
         }
-        catch (e) {
+        catch (exception) {
             throw new NotFoundException('Ingredient not found');
         }
     }
@@ -60,12 +69,6 @@ export class IngredientsDao implements IngredientsDaoInterface, DaoFactoryInterf
             return Promise.resolve(ingredient);
         }
         throw new NotFoundException('Ingredient not found');
-    }
-
-    public getIngredients(queryParams: QueryParams): Promise<Ingredient[]> {
-        const filter = queryParams.filter;
-        const result = this.ingredients.filter(ingredient => ingredient.name.toLowerCase().match(filter));
-        return Promise.resolve(result);
     }
 
     public saveIngredient(ingredient: Ingredient): Promise<Ingredient> {

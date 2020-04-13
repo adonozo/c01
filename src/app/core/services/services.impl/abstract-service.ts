@@ -10,16 +10,17 @@ export abstract class AbstractService {
         try {
             return method();
         } catch (error) {
-            this.defaultLogger.error(`Error on service layer: ${error.stack}`);
-            throw AbstractService.mapError(error);
+            throw this.mapError(error);
         }
     }
 
-    private static mapError(error: Error): Error {
+    private mapError(error: Error): Error {
         switch (error.name) {
-            case "NotFound":
-                return new NotFoundException('Element was not found');
+            case 'NotFound':
+                this.defaultLogger.info(`The element was not found`);
+                return new NotFoundException('The element was not found');
             default:
+                this.defaultLogger.error(`Error on service layer: ${error.stack}`);
                 return new ServiceException('Unknown error');
         }
     }

@@ -33,9 +33,9 @@ export abstract class AbstractMongo {
     private handleQuery<T>(query: () => T, collection: string): T {
         try {
             return query()
-        } catch (e) {
-            this.logger.error(`Error trying to execute query in ${collection}, ${e.stack}`);
-            throw e;
+        } catch (exception) {
+            this.logger.error(`Error trying to execute query in ${collection}, ${exception.stack}`);
+            throw exception;
         }
     }
 }

@@ -2,9 +2,13 @@ import { IngredientsServiceInterface } from "../interfaces/ingredients-service.i
 import { Ingredient } from "../../domain/ingredient";
 import { ObjectID } from "bson";
 import { IngredientType } from "../../domain/ingredient-type.enum";
+import { QueryParams } from "../../domain/api-rest/query-params";
 
 export class IngredientsServiceStub implements IngredientsServiceInterface {
-    public getAllIngredients(): Promise<Ingredient[]> {
+    public getIngredients(queryParams?: QueryParams): Promise<Ingredient[]>;
+    public getIngredients(): Promise<Ingredient[]>;
+
+    public getIngredients(): Promise<Ingredient[]> {
         return Promise.resolve([]);
     }
 
@@ -23,10 +27,6 @@ export class IngredientsServiceStub implements IngredientsServiceInterface {
             description: 'Empty description',
             type: IngredientType.vegetable
         });
-    }
-
-    public getIngredients(): Promise<Ingredient[]> {
-        return Promise.resolve([]);
     }
 
     public updateIngredient(): Promise<void> {

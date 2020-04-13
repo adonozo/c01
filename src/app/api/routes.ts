@@ -5,7 +5,7 @@ import { Router } from "express";
 
 export class Routes {
     private logger = Logger.getLogger('Routes');
-    private routes: Router;
+    private readonly routes: Router;
 
     public constructor(routes: Router) {
         this.routes = routes;

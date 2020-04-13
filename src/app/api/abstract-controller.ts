@@ -4,12 +4,13 @@ import { ServiceStub } from "../core/services/facade/service.stub";
 import * as winston from "winston";
 import { Request, Response, Router } from "express";
 import { Service } from "../core/services/facade/service";
+import { ErrorResponse } from "./interfaces/error-response.interface";
+import { StatusCodes } from "./enums/status-codes.enum";
 require ('dotenv').config();
 
 export abstract class AbstractController {
     protected routes: Router;
     protected service: AbstractService;
-    protected readonly apiVersion = '/api/v1';
 
     public constructor(routes: Router) {
         this.routes = routes;
@@ -19,9 +20,8 @@ export abstract class AbstractController {
     protected abstract getLogger(): winston.Logger;
 
     protected executePromise<T>(request: Request, response: Response, method: () => Promise<T>): void {
-        method().catch(error => {
-            this.getLogger().error(`Error in request: ${error.stack}`);
-            response.status(500).send({ error: 'Internal server error' });
+        method().catch(exception => {
+            this.handleException(response, exception);
         })
     }
 
@@ -30,8 +30,19 @@ export abstract class AbstractController {
             method()
         }
         catch (exception) {
-            this.getLogger().error(`Error in request: ${exception.stack}`);
-            response.status(500).send({ error: 'Internal server error' });
+            this.handleException(response, exception);
+        }
+    }
+
+    private handleException(response: Response, exception: Error): void {
+        switch (exception.name) {
+            case 'NotFound':
+                this.getLogger().info(`Element not found`);
+                response.status(StatusCodes.NOT_FOUND).send(AbstractController.getNotFoundError());
+                break;
+            default:
+                this.getLogger().error(`Error in request: ${exception.stack}`);
+                response.status(StatusCodes.INTERNAL_ERROR).send(AbstractController.getInternalError());
         }
     }
 
@@ -41,6 +52,22 @@ export abstract class AbstractController {
             return Service.getInstance();
         } else {
             return new ServiceStub();
+        }
+    }
+
+    private static getNotFoundError(): ErrorResponse {
+        return {
+            status: StatusCodes.NOT_FOUND,
+            error: 'Not Found',
+            message: 'The item was not found'
+        }
+    }
+
+    private static getInternalError(): ErrorResponse {
+        return {
+            status: StatusCodes.INTERNAL_ERROR,
+            error: 'Internal Service Error',
+            message: 'API error.'
         }
     }
 }
