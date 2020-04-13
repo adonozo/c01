@@ -1,6 +1,7 @@
 import { AbstractController } from "./abstract-controller";
 import { Logger } from "../utils/logger";
 import { Ingredient } from "../core/domain/ingredient";
+import { Request, Response } from "express";
 import * as winston from "winston";
 
 export class IngredientsController extends AbstractController {
@@ -10,53 +11,49 @@ export class IngredientsController extends AbstractController {
         return this.logger;
     }
 
-    public register(): void {
-        const logger = Logger.getLogger('IngredientsController');
-        logger.info('Registering Ingredients Controller');
-        this.app.get(`${this.apiVersion}/ingredients`, async (req, res) => {
-            this.executePromise(req, res, async () => {
-                const result = await this.getIngredients();
-                res.status(200).send(result);
-            })
-        });
-
-        this.app.get(`${this.apiVersion}/ingredients/:id`, async (req, res) => {
-            this.executePromise(req, res, async () => {
-                const result = await this.getIngredient(req.params.id);
-                res.status(200).send(result);
-            })
-        });
-
-        this.app.patch(`${this.apiVersion}/ingredients/:id`, async (req, res) => {
-            this.executePromise(req, res, async () => {
-                await this.updateIngredient(req.params.id, req.body);
-                res.status(204).send();
-            });
-        });
-
-        this.app.delete(`${this.apiVersion}/ingredients/:id`, async (req, res) => {
-            this.executePromise(req, res, async() => {
-                await this.deleteIngredient(req.params.id);
-                res.status(204).send();
-            });
-        });
-
-        this.app.post(`${this.apiVersion}/ingredients`, async (req, res) => {
-            this.executePromise(req, res, async () => {
-                const result = await this.postIngredient(req.body);
-                res.status(201).send(result);
-            });
+    public allIngredients(request: Request, response: Response): void {
+        this.executePromise(request, response, async () => {
+            const result = await this.getIngredients();
+            response.status(200).send(result);
         })
     }
 
-    public async getIngredients(): Promise<Ingredient[]> {
+    public singleIngredient(request: Request, response: Response): void {
+        this.executePromise(request, response, async () => {
+            const result = await this.getIngredient(request.params.id);
+            response.status(200).send(result);
+        })
+    }
+
+    public updateSingleIngredient(request: Request, response: Response): void {
+        this.executePromise(request, response, async () => {
+            await this.updateIngredient(request.params.id, request.body);
+            response.status(204).send();
+        });
+    }
+
+    public newIngredient(request: Request, response: Response): void {
+        this.executePromise(request, response, async () => {
+            const result = await this.postIngredient(request.body);
+            response.status(201).send(result);
+        });
+    }
+
+    public deleteSingleIngredient(request: Request, response: Response): void {
+        this.executePromise(request, response, async() => {
+            await this.deleteIngredient(request.params.id);
+            response.status(204).send();
+        });
+    }
+
+    private async getIngredients(): Promise<Ingredient[]> {
         const ingredientsService = this.service.IngredientsService;
         const ingredients = await ingredientsService.getAllIngredients();
         this.logger.info(`Found ${ingredients.length} ingredients`);
         return ingredients;
     }
 
-    public async getIngredient(id: string): Promise<Ingredient> {
+    private async getIngredient(id: string): Promise<Ingredient> {
         this.logger.info(`Trying to get ingredient with ID: ${id}`);
         const ingredientsService = this.service.IngredientsService;
         const ingredient = await ingredientsService.getIngredient(id);
@@ -64,21 +61,21 @@ export class IngredientsController extends AbstractController {
         return ingredient;
     }
 
-    public async updateIngredient(id: string, ingredient: Ingredient): Promise<void> {
+    private async updateIngredient(id: string, ingredient: Ingredient): Promise<void> {
         this.logger.info(`Trying to update ingredient with ID: ${id}`);
         const ingredientService = this.service.IngredientsService;
         await ingredientService.updateIngredient(id, ingredient);
         this.logger.info(`Ingredient with ID: ${id} updated`);
     }
 
-    public async deleteIngredient(id: string): Promise<void> {
+    private async deleteIngredient(id: string): Promise<void> {
         this.logger.info(`Trying to delete ingredient with ID: ${id}`);
         const ingredientsService = this.service.IngredientsService;
         await ingredientsService.deleteIngredient(id);
         this.logger.info(`Ingredient with ID ${id} deleted`);
     }
 
-    public async postIngredient(ingredient: Ingredient): Promise<Ingredient> {
+    private async postIngredient(ingredient: Ingredient): Promise<Ingredient> {
         this.logger.info(`Insert new ingredient`);
         const ingredientService = this.service.IngredientsService;
         const newIngredient = await ingredientService.createIngredient(ingredient);

@@ -27,6 +27,7 @@ export class Service implements AbstractService {
         if (!this.instance) {
             this.instance =  new Service();
         }
+
         return this.instance;
     }
 

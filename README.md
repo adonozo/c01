@@ -23,6 +23,12 @@ Run the program:
 npm start
 ```
 
+Run with auto-reload for development:
+
+```shell script
+npm run dev
+``` 
+
 Run tests:
 ```shell script
 npm test

@@ -41,7 +41,7 @@ describe('IngredientsController', () => {
 
     it('should return a http 204 No Content on update ingredient', (done) => {
         chai.request(app)
-            .patch('/api/v1/ingredients/507f1f77bcf86cd799439011')
+            .put('/api/v1/ingredients/507f1f77bcf86cd799439011')
             .end((err, res) => {
                 res.should.have.status(204);
                 done();
