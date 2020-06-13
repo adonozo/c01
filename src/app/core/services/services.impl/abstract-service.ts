@@ -1,7 +1,9 @@
 import * as winston from "winston";
 import { NotFoundException } from "../interfaces/exceptions/not-found.exception";
 import { ServiceException } from "../interfaces/exceptions/service.exception";
+import { injectable } from "inversify";
 
+@injectable()
 export abstract class AbstractService {
 
     abstract get defaultLogger(): winston.Logger;

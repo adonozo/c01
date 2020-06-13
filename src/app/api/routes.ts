@@ -25,12 +25,12 @@ export class Routes {
     }
 
     private registerHealthRoutes(): void {
-        const healthController = new HealthController(this.routes);
+        const healthController = new HealthController();
         this.routes.get('/health', (req, res) => healthController.getHealth(req, res));
     }
 
     private registerIngredientsRoutes(): void {
-        const ingredientsController = new IngredientsController(this.Routes);
+        const ingredientsController = new IngredientsController();
         this.routes.get('/ingredients',
             (req, res) => ingredientsController.allIngredients(req, res));
         this.routes.get('/ingredients/:id',

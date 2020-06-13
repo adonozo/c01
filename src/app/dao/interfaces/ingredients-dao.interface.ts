@@ -1,7 +1,7 @@
 import { Ingredient } from "../../core/domain/ingredient";
-import { QueryParams } from "../../core/domain/api-rest/query-params";
+import { QueryParams } from "../../api/models/query-params";
 
-export interface IngredientsDaoInterface {
+export interface IIngredientsDao {
     getIngredients(): Promise<Ingredient[]>;
 
     getIngredients(queryParams: QueryParams): Promise<Ingredient[]>;
@@ -10,7 +10,7 @@ export interface IngredientsDaoInterface {
 
     saveIngredient(ingredient: Ingredient): Promise<Ingredient>;
 
-    updateIngredient(actualIngredient: Ingredient): Promise<void>;
+    updateIngredient(actualIngredient: Ingredient): Promise<Ingredient>;
 
     deleteIngredient(id: string): Promise<void>;
 

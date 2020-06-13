@@ -1,24 +1,23 @@
-import { IngredientsServiceInterface } from "../interfaces/ingredients-service.interface";
-import { DaoFactoryInterface } from "../../../dao/interfaces/dao-factory.interface";
-import { IngredientsDaoInterface } from "../../../dao/interfaces/ingredients-dao.interface";
+import { IIngredientsService } from "../interfaces/ingredients-service.interface";
+import { IIngredientsDao } from "../../../dao/interfaces/ingredients-dao.interface";
 import { Logger } from "../../../utils/logger";
 import { Ingredient } from "../../domain/ingredient";
-import { QueryParams } from "../../domain/api-rest/query-params";
+import { QueryParams } from "../../../api/models/query-params";
 import { AbstractService } from "./abstract-service";
 import * as winston from "winston";
 import { NotFoundException } from "../interfaces/exceptions/not-found.exception";
-import { ObjectId } from "bson";
+import { inject, injectable } from "inversify";
+import { TYPES } from "../../../di/types";
 
-export class IngredientsService extends AbstractService implements IngredientsServiceInterface {
-    private ingredientsDaoFactory: DaoFactoryInterface<IngredientsDaoInterface>;
-    private ingredientsDao: IngredientsDaoInterface;
+@injectable()
+export class IngredientsService extends AbstractService implements IIngredientsService {
+    private ingredientsDao: IIngredientsDao;
     private logger = Logger.getLogger('IngredientsService');
 
-    public constructor(ingredientsDaoFactory: DaoFactoryInterface<IngredientsDaoInterface>) {
+    public constructor(@inject(TYPES.IngredientsDao) ingredientsDao: IIngredientsDao) {
         super();
         this.logger.info('Creating Ingredients Service');
-        this.ingredientsDaoFactory = ingredientsDaoFactory;
-        this.ingredientsDao = this.ingredientsDaoFactory.create();
+        this.ingredientsDao = ingredientsDao;
     }
 
     public get defaultLogger(): winston.Logger {
@@ -28,37 +27,37 @@ export class IngredientsService extends AbstractService implements IngredientsSe
     public getIngredients(): Promise<Ingredient[]>
     public getIngredients(queryParams: QueryParams): Promise<Ingredient[]>
 
-    public getIngredients(queryParams?: QueryParams): Promise<Ingredient[]> {
+    public async getIngredients(queryParams?: QueryParams): Promise<Ingredient[]> {
         if (!queryParams) {
-            return this.handle(() => this.ingredientsDao.getIngredients());
+            return this.handle(async () => await this.ingredientsDao.getIngredients());
         }
 
-        return this.handle(() => this.ingredientsDao.getIngredients(queryParams));
+        return this.handle(async () => await this.ingredientsDao.getIngredients(queryParams));
     }
 
-    public createIngredient(ingredient: Ingredient): Promise<Ingredient> {
-        return this.handle(() => this.ingredientsDao.saveIngredient(ingredient));
+    public async createIngredient(ingredient: Ingredient): Promise<Ingredient> {
+        return this.handle(async () => await this.ingredientsDao.saveIngredient(ingredient));
     }
 
-    public deleteIngredient(id: string): Promise<void> {
+    public async deleteIngredient(id: string): Promise<void> {
         return this.handle(async () => {
             await this.ingredientExists(id);
             return this.ingredientsDao.deleteIngredient(id);
         });
     }
 
-    public getIngredient(id: string): Promise<Ingredient> {
+    public async getIngredient(id: string): Promise<Ingredient> {
         return this.handle(async () => {
             await this.ingredientExists(id);
             return this.ingredientsDao.getIngredient(id);
         });
     }
 
-    public updateIngredient(id: string, actualIngredient: Ingredient): Promise<void> {
+    public async updateIngredient(id: string, actualIngredient: Ingredient): Promise<Ingredient> {
         return this.handle(async () => {
             await this.ingredientExists(id);
-            actualIngredient._id = new ObjectId(id);
-            return this.ingredientsDao.updateIngredient(actualIngredient);
+            actualIngredient.id = id;
+            return await this.ingredientsDao.updateIngredient(actualIngredient);
         });
     }
 

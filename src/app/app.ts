@@ -1,3 +1,5 @@
+import "reflect-metadata";
+
 import express = require('express');
 import { Logger } from "./utils/logger";
 import bodyParser = require('body-parser');
@@ -18,7 +20,7 @@ class App {
         const router = express.Router();
         const controllerRoutes = new Routes(router);
 
-        this.app.use(bodyParser.json()); // support json encoded bodies
+        this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: false })); // support encoded bodies
         this.app.use('/api/v1', controllerRoutes.Routes);
     }

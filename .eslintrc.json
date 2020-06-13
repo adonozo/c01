@@ -11,11 +11,12 @@
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": 2017,
+    "ecmaVersion": 2018,
     "sourceType": "module"
   },
   "rules": {
     "object-curly-spacing": ["error", "always"],
+    "@typescript-eslint/interface-name-prefix": ["off"],
     "@typescript-eslint/explicit-function-return-type": ["warn",
       {
         "allowExpressions": true,

@@ -1,10 +1,9 @@
-import { IngredientsServiceInterface } from "../interfaces/ingredients-service.interface";
+import { IIngredientsService } from "../interfaces/ingredients-service.interface";
 import { Ingredient } from "../../domain/ingredient";
-import { ObjectID } from "bson";
-import { IngredientType } from "../../domain/ingredient-type.enum";
-import { QueryParams } from "../../domain/api-rest/query-params";
+import { IngredientType } from "../../domain/enums/ingredient-type.enum";
+import { QueryParams } from "../../../api/models/query-params";
 
-export class IngredientsServiceStub implements IngredientsServiceInterface {
+export class IngredientsServiceStub implements IIngredientsService {
     public getIngredients(queryParams?: QueryParams): Promise<Ingredient[]>;
     public getIngredients(): Promise<Ingredient[]>;
 
@@ -22,14 +21,14 @@ export class IngredientsServiceStub implements IngredientsServiceInterface {
 
     public getIngredient(): Promise<Ingredient> {
         return Promise.resolve({
-            _id: new ObjectID('507f1f77bcf86cd799439011'),
+            id: 'f5f9551c-3b1b-4903-b125-c6f0b5da13d6',
             name: 'Dummy ingredient',
             description: 'Empty description',
             type: IngredientType.vegetable
         });
     }
 
-    public updateIngredient(): Promise<void> {
-        return Promise.resolve();
+    public updateIngredient(id: string, ingredient: Ingredient): Promise<Ingredient> {
+        return Promise.resolve(ingredient);
     }
 }

@@ -1,12 +1,11 @@
-import { IngredientsDaoInterface } from "../interfaces/ingredients-dao.interface";
-import { DaoFactoryInterface } from "../interfaces/dao-factory.interface";
+import { IIngredientsDao } from "../interfaces/ingredients-dao.interface";
 import { Ingredient } from "../../core/domain/ingredient";
-import { ObjectId } from "bson";
-import { IngredientType } from "../../core/domain/ingredient-type.enum";
-import { QueryParams } from "../../core/domain/api-rest/query-params";
+import { IngredientType } from "../../core/domain/enums/ingredient-type.enum";
+import { QueryParams } from "../../api/models/query-params";
 import { NotFoundException } from "../interfaces/exceptions/not-found.exception";
+import { v4 as uuid } from "uuid";
 
-export class IngredientsDao implements IngredientsDaoInterface, DaoFactoryInterface<IngredientsDao> {
+export class IngredientsDao implements IIngredientsDao {
     private ingredients: Ingredient[];
 
     public constructor() {
@@ -18,7 +17,7 @@ export class IngredientsDao implements IngredientsDaoInterface, DaoFactoryInterf
     }
 
     public ingredientExists(id: string): Promise<boolean> {
-        const ingredientIndex = this.ingredients.findIndex(ingredient => ingredient._id.equals(id));
+        const ingredientIndex = this.ingredients.findIndex(ingredient => ingredient.id === id);
         return Promise.resolve(ingredientIndex >= 0);
     }
 
@@ -26,7 +25,7 @@ export class IngredientsDao implements IngredientsDaoInterface, DaoFactoryInterf
     public getIngredients(queryParams: QueryParams): Promise<Ingredient[]>;
 
     public getIngredients(queryParams?: QueryParams): Promise<Ingredient[]> {
-        if (!queryParams){
+        if (!queryParams) {
             return Promise.resolve(this.ingredients);
         }
 
@@ -38,13 +37,13 @@ export class IngredientsDao implements IngredientsDaoInterface, DaoFactoryInterf
     private static setDummyIngredients(): Ingredient[] {
         return [
             {
-                _id: new ObjectId('507f1f77bcf86cd799439011'),
+                id: 'f5f9551c-3b1b-4903-b125-c6f0b5da13d6',
                 name: 'Onion',
                 description: 'The basic vegetable for foods',
                 type: IngredientType.vegetable
             },
             {
-                _id: new ObjectId(),
+                id: uuid(),
                 name: 'Carrot',
                 description: 'The basic vegatable for coock',
                 type: IngredientType.vegetable
@@ -54,7 +53,7 @@ export class IngredientsDao implements IngredientsDaoInterface, DaoFactoryInterf
 
     public deleteIngredient(id: string): Promise<void> {
         try {
-            const index = this.ingredients.findIndex(ingredient => ingredient._id.equals(id));
+            const index = this.ingredients.findIndex(ingredient => ingredient.id === id);
             this.ingredients = this.ingredients.slice(index, 1);
             return Promise.resolve();
         }
@@ -64,7 +63,7 @@ export class IngredientsDao implements IngredientsDaoInterface, DaoFactoryInterf
     }
 
     public getIngredient(id: string): Promise<Ingredient> {
-        const ingredient = this.ingredients.find(ingredient => ingredient._id.equals(id));
+        const ingredient = this.ingredients.find(ingredient => ingredient.id === id);
         if (ingredient) {
             return Promise.resolve(ingredient);
         }
@@ -72,13 +71,13 @@ export class IngredientsDao implements IngredientsDaoInterface, DaoFactoryInterf
     }
 
     public saveIngredient(ingredient: Ingredient): Promise<Ingredient> {
-        ingredient._id =  new ObjectId();
+        ingredient.id =  uuid();
         return Promise.resolve(ingredient);
     }
 
-    public updateIngredient(actualIngredient: Ingredient): Promise<void> {
-        const ingredientIndex = this.ingredients.findIndex(ingredient => ingredient._id.equals(actualIngredient._id));
+    public updateIngredient(actualIngredient: Ingredient): Promise<Ingredient> {
+        const ingredientIndex = this.ingredients.findIndex(ingredient => ingredient.id === actualIngredient.id);
         this.ingredients[ingredientIndex] = actualIngredient;
-        return Promise.resolve();
+        return Promise.resolve(actualIngredient);
     }
 }

@@ -1,16 +1,15 @@
 import { expect } from 'chai';
 import { IngredientsDao } from "../../app/dao/dao.memory/ingredients-dao";
 import { IngredientsService } from "../../app/core/services/services.impl/ingredients-service";
-import { QueryParams } from "../../app/core/domain/api-rest/query-params";
-import { ObjectID } from "bson";
+import { QueryParams } from "../../app/api/models/query-params";
 import { Ingredient } from "../../app/core/domain/ingredient";
-import { IngredientType } from "../../app/core/domain/ingredient-type.enum";
+import { IngredientType } from "../../app/core/domain/enums/ingredient-type.enum";
 
 describe('IngredientsService', () => {
-    const defaultId = '507f1f77bcf86cd799439011';
+    const defaultId = 'f5f9551c-3b1b-4903-b125-c6f0b5da13d6';
     const defaultIngredient = (id: string): Ingredient => {
         return {
-            _id: new ObjectID(id),
+            id: id,
             name: 'Updated Ingredient',
             description: 'Dummy description',
             type: IngredientType.vegetable
@@ -41,7 +40,7 @@ describe('IngredientsService', () => {
 
     it('should not throw an error updating an Ingredient', async () => {
         const updatedIngredient: Ingredient = defaultIngredient(defaultId);
-        const serviceCall = (): Promise<void> => service.updateIngredient(defaultId, updatedIngredient);
+        const serviceCall = (): Promise<Ingredient> => service.updateIngredient(defaultId, updatedIngredient);
         expect(await serviceCall).to.not.throw(Error)
     });
 

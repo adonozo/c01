@@ -1,5 +1,5 @@
 import { Health } from "../../domain/health";
 
-export interface HealthServiceInterface {
+export interface IHealthService {
     getHealth(): Health;
 }

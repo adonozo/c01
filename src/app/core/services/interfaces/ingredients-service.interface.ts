@@ -1,7 +1,7 @@
 import { Ingredient } from "../../domain/ingredient";
-import { QueryParams } from "../../domain/api-rest/query-params";
+import { QueryParams } from "../../../api/models/query-params";
 
-export interface IngredientsServiceInterface {
+export interface IIngredientsService {
     getIngredients(): Promise<Ingredient[]>;
 
     getIngredients(queryParams: QueryParams): Promise<Ingredient[]>;
@@ -10,7 +10,7 @@ export interface IngredientsServiceInterface {
 
     createIngredient(ingredient: Ingredient): Promise<Ingredient>;
 
-    updateIngredient(id: string, actualIngredient: Ingredient): Promise<void>;
+    updateIngredient(id: string, actualIngredient: Ingredient): Promise<Ingredient>;
 
     deleteIngredient(id: string): Promise<void>;
 }

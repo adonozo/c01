@@ -1,31 +1,25 @@
-import { ServiceType } from "../core/domain/service-type.enum";
-import { AbstractService } from "../core/services/facade/abstract-service";
+import { ServiceType } from "../core/domain/enums/service-type.enum";
+import { IService } from "../core/services/facade/service.interface";
 import { ServiceStub } from "../core/services/facade/service.stub";
 import * as winston from "winston";
-import { Request, Response, Router } from "express";
-import { Service } from "../core/services/facade/service";
-import { ErrorResponse } from "./interfaces/error-response.interface";
+import { Response } from "express";
 import { StatusCodes } from "./enums/status-codes.enum";
+import container from "../di/container";
+import { TYPES } from "../di/types";
+import { ErrorResponse } from "./models/error-response";
+import { Service } from "../core/services/facade/service";
 require ('dotenv').config();
 
 export abstract class AbstractController {
-    protected routes: Router;
-    protected service: AbstractService;
+    protected service: IService;
 
-    public constructor(routes: Router) {
-        this.routes = routes;
+    public constructor() {
         this.service = AbstractController.createService();
     }
 
     protected abstract getLogger(): winston.Logger;
 
-    protected executePromise<T>(request: Request, response: Response, method: () => Promise<T>): void {
-        method().catch(exception => {
-            this.handleException(response, exception);
-        })
-    }
-
-    protected executeMethod<T>(request: Request, response: Response, method: () => T): void {
+    protected handle<T>(response: Response, method: () => T): void {
         try {
             method()
         }
@@ -38,36 +32,20 @@ export abstract class AbstractController {
         switch (exception.name) {
             case 'NotFound':
                 this.getLogger().info(`Element not found`);
-                response.status(StatusCodes.NOT_FOUND).send(AbstractController.getNotFoundError());
+                response.status(StatusCodes.NOT_FOUND).send(ErrorResponse.getNotFoundError());
                 break;
             default:
                 this.getLogger().error(`Error in request: ${exception.stack}`);
-                response.status(StatusCodes.INTERNAL_ERROR).send(AbstractController.getInternalError());
+                response.status(StatusCodes.INTERNAL_ERROR).send(ErrorResponse.getInternalError());
         }
     }
 
-    private static createService(): AbstractService {
+    private static createService(): IService {
         const serviceType = process.env.SERVICE;
         if (serviceType === ServiceType.impl) {
-            return Service.getInstance();
+            return container.get<Service>(TYPES.Service);
         } else {
             return new ServiceStub();
-        }
-    }
-
-    private static getNotFoundError(): ErrorResponse {
-        return {
-            status: StatusCodes.NOT_FOUND,
-            error: 'Not Found',
-            message: 'The item was not found'
-        }
-    }
-
-    private static getInternalError(): ErrorResponse {
-        return {
-            status: StatusCodes.INTERNAL_ERROR,
-            error: 'Internal Service Error',
-            message: 'API error.'
         }
     }
 }

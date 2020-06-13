@@ -1,18 +1,20 @@
-import { DaoFactoryInterface } from "../../../dao/interfaces/dao-factory.interface";
-import { HealthServiceInterface } from "../interfaces/health-service.interface";
+import { IHealthService } from "../interfaces/health-service.interface";
 import { Health } from "../../domain/health";
 import { HealthDao } from "../../../dao/dao.memory/health-dao";
 import { Logger } from "../../../utils/logger";
 import { AbstractService } from "./abstract-service";
 import * as winston from "winston";
+import { inject, injectable } from "inversify";
+import { TYPES } from "../../../di/types";
 
-export class HealthService extends AbstractService implements HealthServiceInterface {
-    private healthDaoFactory: DaoFactoryInterface<HealthDao>;
+@injectable()
+export class HealthService extends AbstractService implements IHealthService {
     private logger = Logger.getLogger('HealthService');
+    private readonly healthDao: HealthDao;
 
-    public constructor(healthDaoFactory: DaoFactoryInterface<HealthDao>) {
+    public constructor(@inject(TYPES.HealthDao) healthDao: HealthDao) {
         super();
-        this.healthDaoFactory = healthDaoFactory;
+        this.healthDao = healthDao;
     }
 
     public get defaultLogger(): winston.Logger {
@@ -20,8 +22,7 @@ export class HealthService extends AbstractService implements HealthServiceInter
     }
 
     public getHealth(): Health {
-        const healthDao = this.healthDaoFactory.create();
-        const health = healthDao.getHealth();
+        const health = this.healthDao.getHealth();
         this.logger.info('System health: %j', health);
         return health;
     }

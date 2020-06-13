@@ -13,35 +13,35 @@ export class IngredientsController extends AbstractController {
     }
 
     public allIngredients(request: Request, response: Response): void {
-        this.executePromise(request, response, async () => {
+        this.handle(response, async () => {
             const result = await this.getIngredients();
             response.status(StatusCodes.OK).send(result);
-        })
+        });
     }
 
     public singleIngredient(request: Request, response: Response): void {
-        this.executePromise(request, response, async () => {
+        this.handle(response, async () => {
             const result = await this.getIngredient(request.params.id);
             response.status(StatusCodes.OK).send(result);
         })
     }
 
     public updateSingleIngredient(request: Request, response: Response): void {
-        this.executePromise(request, response, async () => {
-            await this.updateIngredient(request.params.id, request.body);
-            response.status(StatusCodes.NO_CONTENT).send();
+        this.handle(response, async () => {
+            const result = await this.updateIngredient(request.params.id, request.body);
+            response.status(StatusCodes.OK).send(result);
         });
     }
 
     public newIngredient(request: Request, response: Response): void {
-        this.executePromise(request, response, async () => {
+        this.handle(response, async () => {
             const result = await this.postIngredient(request.body);
             response.status(StatusCodes.CREATED).send(result);
         });
     }
 
     public deleteSingleIngredient(request: Request, response: Response): void {
-        this.executePromise(request, response, async() => {
+        this.handle(response, async () => {
             await this.deleteIngredient(request.params.id);
             response.status(StatusCodes.NO_CONTENT).send();
         });
@@ -80,7 +80,7 @@ export class IngredientsController extends AbstractController {
         this.logger.info(`Insert new ingredient`);
         const ingredientService = this.service.IngredientsService;
         const newIngredient = await ingredientService.createIngredient(ingredient);
-        this.logger.info(`Ingredient created with ID ${ingredient._id}`);
+        this.logger.info(`Ingredient created with ID ${ingredient.id}`);
         return newIngredient;
     }
 }

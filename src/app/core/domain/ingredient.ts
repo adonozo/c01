@@ -1,9 +1,8 @@
-import { ObjectId } from "bson";
-import { IngredientType } from "./ingredient-type.enum";
+import { IngredientType } from "./enums/ingredient-type.enum";
 
-export interface Ingredient {
-    _id: ObjectId;
-    name: string;
-    description: string;
-    type: IngredientType;
+export class Ingredient {
+    public id: string;
+    public name: string;
+    public description: string;
+    public type: IngredientType;
 }

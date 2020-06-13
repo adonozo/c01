@@ -1,4 +1,4 @@
-export interface Health {
-    id: string;
-    version: string;
+export class Health {
+    public id: string;
+    public version: string;
 }

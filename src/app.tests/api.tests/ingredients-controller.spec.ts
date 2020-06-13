@@ -43,7 +43,7 @@ describe('IngredientsController', () => {
         chai.request(app)
             .put('/api/v1/ingredients/507f1f77bcf86cd799439011')
             .end((err, res) => {
-                res.should.have.status(204);
+                res.should.have.status(200);
                 done();
             });
     });

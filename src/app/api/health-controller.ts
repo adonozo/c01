@@ -8,12 +8,12 @@ export class HealthController extends AbstractController {
     private logger = Logger.getLogger('HealthController');
 
     public getHealth(request: Request, response: Response): void {
-        this.executeMethod(request, response, () => {
+        this.handle(response, () => {
             this.logger.info('Getting system\'s health');
             const healthService = this.service.HealthService;
             const health = healthService.getHealth();
             response.status(StatusCodes.OK).send(health);
-        })
+        });
     }
 
     protected getLogger(): winston.Logger {
