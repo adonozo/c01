@@ -4,6 +4,7 @@ import { IngredientsService } from "../../app/core/services/services.impl/ingred
 import { QueryParams } from "../../app/api/models/query-params";
 import { Ingredient } from "../../app/core/domain/ingredient";
 import { IngredientType } from "../../app/core/domain/enums/ingredient-type.enum";
+import { NotFoundException } from "../../app/core/services/interfaces/exceptions/not-found.exception";
 
 describe('IngredientsService', () => {
     const defaultId = 'f5f9551c-3b1b-4903-b125-c6f0b5da13d6';
@@ -58,7 +59,7 @@ describe('IngredientsService', () => {
             await service.getIngredient('507f1f77bcf86cd799439097');
             expect.fail('Expected error was not thrown');
         } catch (e) {
-            expect(e.name).to.be.equal('NotFound');
+            expect(e).to.be.instanceOf(NotFoundException);
         }
     });
 });
