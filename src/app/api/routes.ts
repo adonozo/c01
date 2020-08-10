@@ -2,6 +2,7 @@ import { Logger } from "../utils/logger";
 import { HealthController } from "./health-controller";
 import { IngredientsController } from "./ingredients-controller";
 import { Router } from "express";
+import { RecipesController } from "./recipes-controller";
 
 export class Routes {
     private logger = Logger.getLogger('Routes');
@@ -21,7 +22,10 @@ export class Routes {
         this.registerHealthRoutes();
 
         this.logger.info('Registering Ingredients Controller');
-        this.registerIngredientsRoutes()
+        this.registerIngredientsRoutes();
+
+        this.logger.info('Registering Recipes Controller');
+        this.registerRecipeRoutes();
     }
 
     private registerHealthRoutes(): void {
@@ -32,14 +36,28 @@ export class Routes {
     private registerIngredientsRoutes(): void {
         const ingredientsController = new IngredientsController();
         this.routes.get('/ingredients',
-            (req, res) => ingredientsController.allIngredients(req, res));
+            async (req, res) => await ingredientsController.allIngredients(req, res));
         this.routes.get('/ingredients/:id',
-            (req, res) => ingredientsController.singleIngredient(req, res));
+            async (req, res) => await ingredientsController.singleIngredient(req, res));
         this.routes.put('/ingredients/:id',
-            (req, res) => ingredientsController.updateSingleIngredient(req, res));
+            async (req, res) => await ingredientsController.updateSingleIngredient(req, res));
         this.routes.post('/ingredients',
-            (req, res) => ingredientsController.newIngredient(req, res));
+            async (req, res) => await ingredientsController.newIngredient(req, res));
         this.routes.delete('/ingredients/:id',
-            (req, res) => ingredientsController.deleteSingleIngredient(req, res));
+            async (req, res) => await ingredientsController.deleteSingleIngredient(req, res));
+    }
+
+    private registerRecipeRoutes(): void {
+        const recipesController = new RecipesController();
+        this.routes.get('/recipes',
+            async (req, res) => await recipesController.allRecipes(req, res));
+        this.routes.get('/recipes/:id',
+            async (req, res) => await recipesController.singleRecipe(req, res));
+        this.routes.put('/recipes/:id',
+            async (req, res) => await recipesController.updateSingleRecipe(req, res));
+        this.routes.post('/recipes',
+            async (req, res) => await recipesController.createRecipe(req, res));
+        this.routes.delete('/recipes/:id',
+            async (req, res) => await recipesController.deleteSingleRecipe(req, res));
     }
 }

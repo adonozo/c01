@@ -6,7 +6,7 @@ chai.use(chaiHttp);
 chai.should();
 
 describe('IngredientsController', () => {
-    it('should return an http 200 OK status on get ingredients', (done) => {
+    it('should return a http 200 OK status on get ingredients', (done) => {
         chai.request(app)
             .get('/api/v1/ingredients')
             .end((err, res) => {
@@ -43,7 +43,7 @@ describe('IngredientsController', () => {
         chai.request(app)
             .put('/api/v1/ingredients/507f1f77bcf86cd799439011')
             .end((err, res) => {
-                res.should.have.status(200);
+                res.should.have.status(204);
                 done();
             });
     });

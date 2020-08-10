@@ -8,9 +8,9 @@ export abstract class AbstractService {
 
     abstract get defaultLogger(): winston.Logger;
 
-    protected handle<T>(method: () => T): T {
+    protected async handle<T>(method: () => T): Promise<T> {
         try {
-            return method();
+            return await method();
         } catch (error) {
             throw this.mapError(error);
         }

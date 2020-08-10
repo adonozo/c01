@@ -29,7 +29,7 @@ export class IngredientsDao extends AbstractMongo implements IIngredientsDao {
             const ingredients = await this.runQuery<IngredientMongo, IngredientMongo[]>(async collection => {
                 return await collection.find().toArray();
             }, this.collectionName);
-            return ingredients.map(ingredient => IngredientMongo.toIngredient(ingredient));
+            return ingredients.map(IngredientMongo.toIngredient);
         }
 
         this.logger.info(`Searching ingredients from supplied params`);
@@ -46,7 +46,7 @@ export class IngredientsDao extends AbstractMongo implements IIngredientsDao {
 
     public async deleteIngredient(id: string): Promise<void> {
         this.logger.info(`Trying to remove ingredient with ID: ${id}`);
-        return await this.runQuery<IngredientMongo, void>(async collection => {
+        await this.runQuery<IngredientMongo, void>(async collection => {
             const result = await collection.deleteOne({ id: id });
             if (!result) {
                 throw new MongoException(`Error trying to delete ingredient with ID: ${id}`);
@@ -70,7 +70,7 @@ export class IngredientsDao extends AbstractMongo implements IIngredientsDao {
         this.logger.info(`Checking if ingredient with ID ${id} exists`);
         return await this.runQuery<IngredientMongo, boolean>(async collection => {
             const result = await collection.findOne({ id: id });
-            return result != null;
+            return !!result;
         }, this.collectionName);
     }
 

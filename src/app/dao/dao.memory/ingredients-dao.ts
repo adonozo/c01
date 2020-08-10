@@ -12,10 +12,6 @@ export class IngredientsDao implements IIngredientsDao {
         this.ingredients = IngredientsDao.setDummyIngredients();
     }
 
-    public create(): IngredientsDao {
-        return new IngredientsDao();
-    }
-
     public ingredientExists(id: string): Promise<boolean> {
         const ingredientIndex = this.ingredients.findIndex(ingredient => ingredient.id === id);
         return Promise.resolve(ingredientIndex >= 0);

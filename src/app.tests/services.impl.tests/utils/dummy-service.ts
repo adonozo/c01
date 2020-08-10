@@ -7,8 +7,8 @@ export class DummyService extends AbstractService {
         return Logger.getLogger('HealthService');
     }
 
-    public throwError(error: Error): void {
-        this.handle(() => {
+    public async throwError(error: Error): Promise<void> {
+        await this.handle(() => {
             throw error;
         })
     }

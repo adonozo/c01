@@ -28,7 +28,7 @@ describe('IngredientsService', () => {
         expect(ingredients.length).to.be.greaterThan(0);
     });
 
-    it('should return a non empty Ingredients array', async () => {
+    it('should return a non empty Ingredients array on query params', async () => {
         const params = QueryParams.defaultParams;
         const ingredients = await service.getIngredients(params);
         expect(ingredients.length).to.be.greaterThan(0);

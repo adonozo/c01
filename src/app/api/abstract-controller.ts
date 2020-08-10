@@ -8,7 +8,6 @@ import container from "../di/container";
 import { TYPES } from "../di/types";
 import { ErrorResponse } from "./models/error-response";
 import { Service } from "../core/services/facade/service";
-import { NotFoundException } from "../core/services/interfaces/exceptions/not-found.exception";
 require ('dotenv').config();
 
 export abstract class AbstractController {
@@ -20,9 +19,9 @@ export abstract class AbstractController {
 
     protected abstract getLogger(): winston.Logger;
 
-    protected handle<T>(response: Response, method: () => T): void {
+    protected async handle<T>(response: Response, method: () => T): Promise<void> {
         try {
-            method()
+            await method()
         }
         catch (exception) {
             this.handleException(response, exception);
@@ -30,8 +29,8 @@ export abstract class AbstractController {
     }
 
     private handleException(response: Response, exception: Error): void {
-        switch (typeof exception) {
-            case NotFoundException.name:
+        switch (exception.name) {
+            case 'NotFound':
                 this.getLogger().info(`Element not found`);
                 response.status(StatusCodes.NOT_FOUND).send(ErrorResponse.getNotFoundError());
                 break;

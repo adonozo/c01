@@ -9,27 +9,27 @@ Using the Mongo Driver for database.
 ---
 
 Install with:
-```shell script
+```shell
 npm install
 ```
 
 Build the program:
-```shell script
+```shell
 npm run:build
 ```
 
 Run the program:
-```shell script
+```shell
 npm start
 ```
 
 Run with auto-reload for development:
 
-```shell script
+```shell
 npm run dev
 ``` 
 
 Run tests:
-```shell script
+```shell
 npm test
 ```

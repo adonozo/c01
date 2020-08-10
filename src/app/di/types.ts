@@ -3,9 +3,11 @@ export const TYPES = {
     MongoClient: Symbol('MongoClient'),
     IngredientsDao: Symbol('IngredientsDao'),
     HealthDao: Symbol('HealthDao'),
+    RecipeDao: Symbol('RecipesDao'),
 
     // Services
     IngredientsService: Symbol('IngredientsService'),
     HealthService: Symbol('HealthService'),
-    Service: Symbol('Service')
+    Service: Symbol('Service'),
+    RecipeService: Symbol('RecipesService')
 }

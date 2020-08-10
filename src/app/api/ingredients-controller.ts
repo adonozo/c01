@@ -12,36 +12,36 @@ export class IngredientsController extends AbstractController {
         return this.logger;
     }
 
-    public allIngredients(request: Request, response: Response): void {
-        this.handle(response, async () => {
+    public async allIngredients(request: Request, response: Response): Promise<void> {
+        await this.handle(response, async () => {
             const result = await this.getIngredients();
             response.status(StatusCodes.OK).send(result);
         });
     }
 
-    public singleIngredient(request: Request, response: Response): void {
-        this.handle(response, async () => {
+    public async singleIngredient(request: Request, response: Response): Promise<void> {
+        await this.handle(response, async () => {
             const result = await this.getIngredient(request.params.id);
             response.status(StatusCodes.OK).send(result);
         })
     }
 
-    public updateSingleIngredient(request: Request, response: Response): void {
-        this.handle(response, async () => {
+    public async updateSingleIngredient(request: Request, response: Response): Promise<void> {
+        await this.handle(response, async () => {
             const result = await this.updateIngredient(request.params.id, request.body);
-            response.status(StatusCodes.OK).send(result);
+            response.status(StatusCodes.NO_CONTENT).send(result);
         });
     }
 
-    public newIngredient(request: Request, response: Response): void {
-        this.handle(response, async () => {
+    public async newIngredient(request: Request, response: Response): Promise<void> {
+        await this.handle(response, async () => {
             const result = await this.postIngredient(request.body);
             response.status(StatusCodes.CREATED).send(result);
         });
     }
 
-    public deleteSingleIngredient(request: Request, response: Response): void {
-        this.handle(response, async () => {
+    public async deleteSingleIngredient(request: Request, response: Response): Promise<void> {
+        await this.handle(response, async () => {
             await this.deleteIngredient(request.params.id);
             response.status(StatusCodes.NO_CONTENT).send();
         });

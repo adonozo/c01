@@ -64,7 +64,7 @@ export class IngredientsService extends AbstractService implements IIngredientsS
     private async ingredientExists(id: string): Promise<void> {
         const exists = await this.ingredientsDao.ingredientExists(id);
         if (!exists) {
-            throw new NotFoundException('Ingredient was not found');
+            throw new NotFoundException(`Ingredient ${id} was not found`);
         }
     }
 }

@@ -6,16 +6,22 @@ import { ServiceException } from "../../app/core/services/interfaces/exceptions/
 describe('AbstractServiceTests', () => {
     const service = new DummyService();
 
-    it('should return a Not Found error', () => {
+    it('should return a Not Found error', async () => {
         const error = new Error('test error');
         error.name = 'NotFound';
-        const result = (): void => service.throwError(error);
-        expect(result).throw(NotFoundException);
+        try {
+            await service.throwError(error);
+        } catch (e) {
+            expect(e).to.be.instanceOf(NotFoundException);
+        }
     });
 
-    it('should return a Service error on any error', () => {
+    it('should return a Service error on any error', async () => {
         const error = new Error('test error');
-        const result = (): void => service.throwError(error);
-        expect(result).throw(ServiceException);
+        try {
+            await service.throwError(error);
+        } catch (e) {
+            expect(e).to.be.instanceOf(ServiceException);
+        }
     });
 });
