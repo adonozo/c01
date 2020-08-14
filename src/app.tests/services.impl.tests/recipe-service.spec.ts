@@ -4,15 +4,17 @@ import { RecipesService } from "../../app/core/services/services.impl/recipes-se
 import { RecipesDao } from "../../app/dao/dao.memory/recipes-dao";
 import { QueryParams } from "../../app/api/models/query-params";
 import { NotFoundException } from "../../app/core/services/interfaces/exceptions/not-found.exception";
+import { RecipeNew } from "../../app/core/domain/recipe-new";
 
 describe('RecipesService', () => {
     const defaultId = '188461a3-33e8-40b6-82c7-3d0699a7f8fa';
-    const defaultRecipe = (id: string): Recipe => {
+    const defaultRecipe = (id: string): RecipeNew => {
         return {
             id: id,
             name: 'Soup',
             description: 'Quick soup',
-            ingredients: []
+            ingredients: [],
+            newIngredients: []
         }
     }
     let service: RecipesService;

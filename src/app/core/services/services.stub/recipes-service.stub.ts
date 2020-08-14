@@ -1,6 +1,7 @@
 import { IRecipesService } from "../interfaces/recipes-service";
 import { Recipe } from "../../domain/recipe";
 import { QueryParams } from "../../../api/models/query-params";
+import { RecipeNew } from "../../domain/recipe-new";
 
 export class RecipesServiceStub implements IRecipesService {
     public deleteRecipe(): Promise<void> {
@@ -22,11 +23,11 @@ export class RecipesServiceStub implements IRecipesService {
         return Promise.resolve([]);
     }
 
-    public createRecipe(recipe: Recipe): Promise<Recipe> {
+    public createRecipe(recipe: RecipeNew): Promise<Recipe> {
         return Promise.resolve(recipe);
     }
 
-    public updateRecipe(id: string, recipe: Recipe): Promise<Recipe> {
+    public updateRecipe(id: string, recipe: RecipeNew): Promise<Recipe> {
         return Promise.resolve(recipe);
     }
 }

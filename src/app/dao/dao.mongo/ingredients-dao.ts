@@ -13,7 +13,7 @@ import { MongoClient } from "./mongo-client";
 
 @injectable()
 export class IngredientsDao extends AbstractMongo implements IIngredientsDao {
-    private collectionName = 'ingredients';
+    private readonly collectionName = 'ingredients';
     private logger = Logger.getLogger('IngredientsDao');
 
     public constructor(@inject(TYPES.MongoClient) mongoClient: MongoClient) {

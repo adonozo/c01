@@ -1,5 +1,6 @@
 import { Recipe } from "../../core/domain/recipe";
 import { QueryParams } from "../../api/models/query-params";
+import { RecipeNew } from "../../core/domain/recipe-new";
 
 export interface IRecipesDao {
     getRecipes(): Promise<Recipe[]>;
@@ -8,14 +9,11 @@ export interface IRecipesDao {
 
     getRecipe(id: string): Promise<Recipe>;
 
-    saveRecipe(recipe: Recipe): Promise<Recipe>;
+    saveRecipe(recipe: RecipeNew): Promise<Recipe>;
 
-    updateRecipe(actualRecipe: Recipe): Promise<Recipe>;
+    updateRecipe(actualRecipe: RecipeNew): Promise<Recipe>;
 
     deleteRecipe(id: string): Promise<void>;
 
     recipeExists(id: string): Promise<boolean>;
-
-    // ToDo this must be in services
-    //insertIngredient(recipeId: string, ingredient: IngredientMetadata): Promise<Recipe>;
 }

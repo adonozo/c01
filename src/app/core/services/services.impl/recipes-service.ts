@@ -8,6 +8,7 @@ import { AbstractService } from "./abstract-service";
 import * as winston from "winston";
 import { TYPES } from "../../../di/types";
 import { NotFoundException } from "../interfaces/exceptions/not-found.exception";
+import { RecipeNew } from "../../domain/recipe-new";
 
 @injectable()
 export class RecipesService extends AbstractService implements IRecipesService {
@@ -24,7 +25,7 @@ export class RecipesService extends AbstractService implements IRecipesService {
         return this.logger;
     }
 
-    public async createRecipe(recipe: Recipe): Promise<Recipe> {
+    public async createRecipe(recipe: RecipeNew): Promise<Recipe> {
         return this.handle(async () => await this.recipeDao.saveRecipe(recipe));
     }
 
@@ -51,7 +52,7 @@ export class RecipesService extends AbstractService implements IRecipesService {
         return this.handle(async () => await this.recipeDao.getRecipes(queryParams));
     }
 
-    public async updateRecipe(id: string, recipe: Recipe): Promise<Recipe> {
+    public async updateRecipe(id: string, recipe: RecipeNew): Promise<Recipe> {
         return this.handle(async () => {
             await this.recipeExists(id);
             recipe.id = id;

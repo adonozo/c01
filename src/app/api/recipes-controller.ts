@@ -4,6 +4,7 @@ import { Logger } from "../utils/logger";
 import { Recipe } from "../core/domain/recipe";
 import { Request, Response } from "express";
 import { StatusCodes } from "./enums/status-codes.enum";
+import { RecipeNew } from "../core/domain/recipe-new";
 
 export class RecipesController extends AbstractController {
     private logger = Logger.getLogger('RecipesController');
@@ -62,7 +63,7 @@ export class RecipesController extends AbstractController {
         return recipe;
     }
 
-    private async updateRecipe(id: string, recipe: Recipe): Promise<Recipe> {
+    private async updateRecipe(id: string, recipe: RecipeNew): Promise<Recipe> {
         this.logger.info(`Trying to update recipe with ID: ${id}`);
         const recipeService = this.service.RecipeService;
         const updatedRecipe = await recipeService.updateRecipe(id, recipe);
@@ -70,7 +71,7 @@ export class RecipesController extends AbstractController {
         return updatedRecipe;
     }
 
-    private async postRecipe(recipe: Recipe): Promise<Recipe> {
+    private async postRecipe(recipe: RecipeNew): Promise<Recipe> {
         this.logger.info(`Inserting new recipe`);
         const recipeService = this.service.RecipeService;
         const createRecipe = await recipeService.createRecipe(recipe);
