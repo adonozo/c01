@@ -4,6 +4,9 @@ import { Ingredient } from "../core/domain/ingredient";
 import { Request, Response } from "express";
 import * as winston from "winston";
 import { StatusCodes } from "./enums/status-codes.enum";
+import { IngredientType } from "../core/domain/enums/ingredient-type.enum";
+import { EnumUtils } from "../core/utils/enum-utils";
+import { IngredientUnit } from "../core/domain/enums/ingredient-unit.enum";
 
 export class IngredientsController extends AbstractController {
     private logger = Logger.getLogger('IngredientsController');
@@ -45,6 +48,16 @@ export class IngredientsController extends AbstractController {
             await this.deleteIngredient(request.params.id);
             response.status(StatusCodes.NO_CONTENT).send();
         });
+    }
+
+    public getIngredientTypes(response: Response): void {
+        const ingredients = EnumUtils.enumToArray(IngredientType);
+        response.status(StatusCodes.OK).send(ingredients);
+    }
+
+    public getIngredientUnits(response: Response): void {
+        const units = EnumUtils.enumToArray(IngredientUnit);
+        response.status(StatusCodes.OK).send(units);
     }
 
     private async getIngredients(): Promise<Ingredient[]> {

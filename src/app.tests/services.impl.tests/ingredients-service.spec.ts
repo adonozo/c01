@@ -13,7 +13,7 @@ describe('IngredientsService', () => {
             id: id,
             name: 'Updated Ingredient',
             description: 'Dummy description',
-            type: IngredientType.vegetable
+            type: IngredientType.Vegetable
         }
     };
     let service: IngredientsService;

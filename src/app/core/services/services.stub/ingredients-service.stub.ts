@@ -24,7 +24,7 @@ export class IngredientsServiceStub implements IIngredientsService {
             id: 'f5f9551c-3b1b-4903-b125-c6f0b5da13d6',
             name: 'Dummy ingredient',
             description: 'Empty description',
-            type: IngredientType.vegetable
+            type: IngredientType.Vegetable
         });
     }
 

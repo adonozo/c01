@@ -45,6 +45,10 @@ export class Routes {
             async (req, res) => await ingredientsController.newIngredient(req, res));
         this.routes.delete('/ingredients/:id',
             async (req, res) => await ingredientsController.deleteSingleIngredient(req, res));
+        this.routes.get('/ingredients/all/types',
+            ((req, res) => ingredientsController.getIngredientTypes(res)));
+        this.routes.get('/ingredients/all/units',
+            ((req, res) => ingredientsController.getIngredientUnits(res)));
     }
 
     private registerRecipeRoutes(): void {

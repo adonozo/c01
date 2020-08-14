@@ -1,5 +1,9 @@
 export enum IngredientUnit {
     Gram,
+    Pound,
     Kilogram,
-    Coup
+    Cup,
+    Tablespoon,
+    Milliliter,
+    Liter
 }

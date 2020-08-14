@@ -1,4 +1,5 @@
 export enum IngredientType {
-    vegetable = 'vegetable',
-    protein = 'protein'
+    Vegetable,
+    Protein,
+    Carbohydrate
 }
