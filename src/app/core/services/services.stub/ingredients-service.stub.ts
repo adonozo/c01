@@ -1,6 +1,5 @@
 import { IIngredientsService } from "../interfaces/ingredients-service.interface";
 import { Ingredient } from "../../domain/ingredient";
-import { IngredientType } from "../../domain/enums/ingredient-type.enum";
 import { QueryParams } from "../../../api/models/query-params";
 
 export class IngredientsServiceStub implements IIngredientsService {
@@ -24,7 +23,7 @@ export class IngredientsServiceStub implements IIngredientsService {
             id: 'f5f9551c-3b1b-4903-b125-c6f0b5da13d6',
             name: 'Dummy ingredient',
             description: 'Empty description',
-            type: IngredientType.Vegetable
+            type: 'Vegetable'
         });
     }
 

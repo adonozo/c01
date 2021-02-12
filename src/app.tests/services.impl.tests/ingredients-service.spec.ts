@@ -3,7 +3,6 @@ import { IngredientsDao } from "../../app/dao/dao.memory/ingredients-dao";
 import { IngredientsService } from "../../app/core/services/services.impl/ingredients-service";
 import { QueryParams } from "../../app/api/models/query-params";
 import { Ingredient } from "../../app/core/domain/ingredient";
-import { IngredientType } from "../../app/core/domain/enums/ingredient-type.enum";
 import { NotFoundException } from "../../app/core/services/interfaces/exceptions/not-found.exception";
 
 describe('IngredientsService', () => {
@@ -13,7 +12,7 @@ describe('IngredientsService', () => {
             id: id,
             name: 'Updated Ingredient',
             description: 'Dummy description',
-            type: IngredientType.Vegetable
+            type: 'Vegetable'
         }
     };
     let service: IngredientsService;
